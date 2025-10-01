@@ -2,11 +2,46 @@
 
 using namespace std;
 
-int dy[4] = {-1, 0, 1, 0};
-int dx[4] = {0, 1, 0, -1};
 int N, M;
+int tetromino[19][4][2] = {
+    // 1 1 1 1
+    {{0, 0}, {0, 1}, {0, 2}, {0, 3}},
+    {{0, 0}, {1, 0}, {2, 0}, {3, 0}},
+    // 1 1 1
+    // 1
+    {{0, 0}, {1, 0}, {2, 0}, {2, 1}},
+    {{0, 0}, {0, 1}, {0, 2}, {-1, 2}},
+    {{0, 0}, {0, 1}, {1, 1}, {2, 1}},
+    {{0, 0}, {0, 1}, {0, 2}, {1, 0}},
+    // 1 1 1
+    //     1
+    {{0, 0}, {1, 0}, {2, 0}, {2, -1}},
+    {{0, 0}, {0, 1}, {0, 2}, {1, 2}},
+    {{0, 0}, {1, 0}, {2, 0}, {0, 1}},
+    {{0, 0}, {1, 0}, {1, 1}, {1, 2}},
+    //   1 1
+    // 1 1
+    {{0, 0}, {1, 0}, {1, 1}, {2, 1}},
+    {{0, 0}, {0, 1}, {1, 0}, {1, -1}},//다름
+    // 1 1
+    //   1 1
+    {{0, 0}, {0, 1}, {1, 1}, {1, 2}},
+    {{0, 0}, {1, 0}, {1, -1}, {2, -1}},
+    // 1 1 1
+    //   1
+    {{0, 0}, {0, 1}, {0, 2}, {1, 1}},
+    {{0, 0}, {1, 0}, {2, 0}, {1, 1}},
+    {{0, 0}, {0, 1}, {0, 2}, {-1, 1}},
+    {{0, 0}, {1, 0}, {2, 0}, {1, -1}},
+    // 1 1
+    // 1 1
+    {{0, 0}, {0, 1}, {1, 0}, {1, 1}},
+};
+
 vector<vector<int>> board;
 
+bool inRange(int type, int y, int x);
+int getVal(int type, int y, int x);
 int getMaxVal();
 
 int main() {
@@ -26,6 +61,35 @@ int main() {
     return 0;
 }
 
+bool inRange(int type, int y, int x) {
+    for (int i = 0; i < 4; ++i) {
+        int dy = tetromino[type][i][0];
+        int dx = tetromino[type][i][1];
+        if (y + dy >= N || y + dy < 0 || x + dx >= M || x + dx < 0)
+            return false;
+    }
+    return true;
+}
+int getVal(int type, int y, int x) {
+    int ret = 0;
+    for (int i = 0; i < 4; ++i) {
+        int dy = tetromino[type][i][0];
+        int dx = tetromino[type][i][1];
+        ret += board[y + dy][x + dx];
+    }
+    return ret;
+}
 int getMaxVal() {
-    
+    int ret = 0;
+    for (int y = 0; y < N; ++y) {
+        for (int x = 0; x < M; ++x) {
+            for (int type = 0; type < 19; ++type) {
+                if (inRange(type, y, x)) {
+                    int val = getVal(type, y, x);
+                    ret = max(ret, val);
+                }
+            }
+        }
+    }
+    return ret;
 }
