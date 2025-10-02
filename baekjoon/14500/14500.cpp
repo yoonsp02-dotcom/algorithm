@@ -45,11 +45,12 @@ int getVal(int type, int y, int x);
 int getMaxVal();
 
 int main() {
+    cout << filesystem::current_path() << "\n";
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    // freopen("input.txt", "r", stdin);
-    // freopen("output.txt", "w", stdout);
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
 
     cin >> N >> M;
     board = vector<vector<int>>(N, vector<int>(M));
