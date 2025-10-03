@@ -1,0 +1,26 @@
+작업 시작할 때
+git pull origin main
+
+코드 수정 후 저장할 때
+git add .
+git commit -m "commit_message"
+git push origin master
+
+문제 생겼을 때
+-최신 내용 확인
+git fetch -all
+git status
+
+
+로컬 변경 완전히 버리고 원격 덮어쓰기
+git fetch -all
+git reset --hard origin/main
+
+아직 commit 안 한 변경사항만 버리기
+git reset --hard
+git pull origin main
+
+내 코드를 살리고 싶을 때 - 백업 후 강제 pull
+git stash
+git pull origin main
+git stash pop
