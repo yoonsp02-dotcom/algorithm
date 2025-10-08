@@ -12,8 +12,8 @@ int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
+    // freopen("input.txt", "r", stdin);
+    // freopen("output.txt", "w", stdout);
 
     cin >> N >> L;
     board = vector<vector<int>>(N, vector<int>(N));
@@ -25,16 +25,15 @@ int main() {
     for (int i = 0; i < N; ++i) {
         if (canPass(board[i])) {
             res++;
-            cout << "i: " << i << endl;
+            // cout << "i: " << i << endl;
         }
     }
-    // cout << "mid: " << res << endl;
     board = turnLeft(board);
-    cout << "finish turn" << endl;
+    // cout << "finish turn" << endl;
     for (int i = 0; i < N; ++i) {
         if (canPass(board[i])) {
             res++;
-            cout << "i: " << i << endl;
+            // cout << "i: " << i << endl;
         }
     }
 
@@ -54,8 +53,11 @@ vector<vector<int>> turnLeft(vector<vector<int>> &board) {
 bool canPass(vector<int> path) {
     vector<bool> isInstalled(path.size(), false);
     deque<int> q;
-    q.push_back(0); // 항상 q.size() <= L
+    // 항상 q.size() <= L
     for (int now = 0; now + 1 < path.size(); ++now) {
+        if (q.empty() && !isInstalled[now])
+            q.push_back(now);
+
         if (path[now] == path[now + 1]) {
             q.push_back(now + 1);
             if (q.size() > L)
