@@ -35,12 +35,15 @@ const int dx[4] = {0, 1, 0, -1};
 vector<string> lake;
 int R, C;
 
+int getIdx(int, int);
+vector<int> melting(DisjointSet&, vector<int>&);
+
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
+    // freopen("input.txt", "r", stdin);
+    // freopen("output.txt", "w", stdout);
 
     cin >> R >> C;
     lake = vector<string>(R);
@@ -56,14 +59,15 @@ int main() {
             }
             if (row[x] == '.') {
                 water.push_back(getIdx(y, x));
-                for (int dir = 0; dir < 4 && dir != 2; ++dir) {
-                    int ny = y + dy[dir];
-                    int nx = x + dx[dir];
-                    if (ny < 0 || ny >= C || nx < 0 || nx >= R)
-                        continue;
-                    if (lake[ny][nx] == '.') {
-                        ds.merge(getIdx(y, x), getIdx(ny, nx));
-                    }
+                // check left
+                if (x - 1 >= 0) {
+                    if (row[x - 1] == '.')
+                        ds.merge(getIdx(y, x), getIdx(y, x - 1));
+                }
+                // check up
+                if (y - 1 >= 0) {
+                    if (lake[y - 1][x] == '.')
+                        ds.merge(getIdx(y, x), getIdx(y - 1, x));
                 }
             }
         }
@@ -71,11 +75,29 @@ int main() {
     }
     int day = 0;
     while (true) {
-        vector<int> water = melting(ds, water);
-        day++;
         if (ds.find(swan[0]) == ds.find(swan[1])) {
             break;
         }
+        day++;
+        water = melting(ds, water);
+        for (int here : water) {
+            int hereY = here / C;
+            int hereX = here % C;
+            for (int dir = 0; dir < 4; ++dir) {
+                int ny = hereY + dy[dir];
+                int nx = hereX + dx[dir];
+                if (ny < 0 || ny >= R || nx < 0 || nx >= C)
+                    continue;
+                if (lake[ny][nx] == '.') {
+                    ds.merge(here, getIdx(ny, nx));
+                }
+            }
+        }
+        // cout << "day: " << day << endl;
+        // for (string s : lake) {
+        //     cout << s << endl;
+        // }
+        // cout << endl;
     }
     cout << day << "\n";
 
@@ -93,13 +115,15 @@ vector<int> melting(DisjointSet& ds, vector<int>& water) {
         for (int dir = 0; dir < 4; ++dir) {
             int ny = hereY + dy[dir];
             int nx = hereX + dx[dir];
-            if (ny < 0 || ny >= C || nx < 0 || nx >= R) 
+            if (ny < 0 || ny >= R || nx < 0 || nx >= C) 
                 continue;
-            if (lake[ny][nx] == 'x') {
+            int there = getIdx(ny, nx);
+            if (lake[ny][nx] == 'X') {
                 lake[ny][nx] = '.';
-                int meltingSpot = getIdx(ny, nx);
-                ds.merge(here, meltingSpot);
-                ret.push_back(meltingSpot);
+                ds.merge(here, there);
+                ret.push_back(there);
+            } else if (lake[ny][nx] == '.') {
+                ds.merge(here, there);
             }
         }
     }
