@@ -8,7 +8,6 @@ int main() {
     cout.tie(NULL);
     // freopen("input.txt", "r", stdin);
     // freopen("output.txt", "w", stdout);
-    
 
     return 0;
 }

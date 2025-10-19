@@ -13,7 +13,7 @@ git status
 
 
 로컬 변경 완전히 버리고 원격 덮어쓰기
-git fetch -all
+git fetch --all
 git reset --hard origin/main
 
 아직 commit 안 한 변경사항만 버리기
